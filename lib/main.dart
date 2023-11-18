@@ -1,13 +1,17 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:firedart/firedart.dart' as firedart;
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'package:flutter/foundation.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+// Firebase
+import 'package:firedart/firedart.dart' as firedart; // for windows
+import 'package:firebase_core/firebase_core.dart' as firebase; // for web and android
+import 'package:firedart/auth/firebase_auth.dart' as firebase; // for web and android
+import 'firebase_options.dart';
+
+// the version of the whole application qu2s
+// {major}.{minor}.{patch}::{development}
 const String version = 'v0.0.0::03';
 
 void main() {
@@ -35,19 +39,21 @@ class _MainAppState extends State<MainApp> {
 
   void connectToDatabase() async {
     if (kIsWeb || defaultTargetPlatform == TargetPlatform.android) {
-      Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-      debugPrint('Connected to Database');
+      firebase.Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      firebase.FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', firedart.VolatileStore());
+      debugPrint('Connected to Firebase Database and Authentication');
       setState(() {
         isLoaded = true;
       });
     } else if (defaultTargetPlatform == TargetPlatform.windows) {
       firedart.Firestore.initialize('qu2s-596fc');
-      debugPrint('Connected to Database');
+      firedart.FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', firedart.VolatileStore());
+      debugPrint('Connected to Firebase Database and Authentication');
       setState(() {
         isLoaded = true;
       });
     } else {
-      debugPrint('NOT Connected to Database');
+      debugPrint('NOT Connected to Firebase Database and Authentication');
     }
   }
 

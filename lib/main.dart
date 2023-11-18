@@ -76,9 +76,18 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     if (isLoaded) {
       return MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text(seconds),
+        home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 0,
+              bottom: const PreferredSize(
+                  preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
+                  child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Home')])),
+            ),
+            body: TabBarView(
+              children: [HomePage(seconds: seconds), HomePage(seconds: seconds)],
+            ),
           ),
         ),
       );
@@ -93,5 +102,23 @@ class _MainAppState extends State<MainApp> {
         ),
       );
     }
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({
+    super.key,
+    required this.seconds,
+  });
+
+  final String seconds;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(seconds),
+      ),
+    );
   }
 }

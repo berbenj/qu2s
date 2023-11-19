@@ -5,14 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 // Firebase
-import 'package:firedart/firedart.dart' as firedart; // for windows
-import 'package:firebase_core/firebase_core.dart' as firebase; // for web and android
-import 'package:firedart/auth/firebase_auth.dart' as firebase; // for web and android
-import 'firebase_options.dart';
+import 'package:firedart/firedart.dart';
 
-// the version of the whole application qu2s
-// {major}.{minor}.{patch}::{development}
-const String version = 'v0.0.0::03';
+import 'download_page.dart';
+import 'version.dart';
 
 void main() {
   runApp(const MainApp());
@@ -38,23 +34,12 @@ class _MainAppState extends State<MainApp> {
   }
 
   void connectToDatabase() async {
-    if (kIsWeb || defaultTargetPlatform == TargetPlatform.android) {
-      firebase.Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-      firebase.FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', firedart.VolatileStore());
-      debugPrint('Connected to Firebase Database and Authentication');
-      setState(() {
-        isLoaded = true;
-      });
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      firedart.Firestore.initialize('qu2s-596fc');
-      firedart.FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', firedart.VolatileStore());
-      debugPrint('Connected to Firebase Database and Authentication');
-      setState(() {
-        isLoaded = true;
-      });
-    } else {
-      debugPrint('NOT Connected to Firebase Database and Authentication');
-    }
+    Firestore.initialize('qu2s-596fc');
+    FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', VolatileStore());
+    debugPrint('Connected to Firebase Database and Authentication');
+    setState(() {
+      isLoaded = true;
+    });
   }
 
   @override
@@ -75,22 +60,41 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     if (isLoaded) {
-      return MaterialApp(
-        home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              toolbarHeight: 0,
-              bottom: const PreferredSize(
-                  preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
-                  child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Home')])),
-            ),
-            body: TabBarView(
-              children: [HomePage(seconds: seconds), HomePage(seconds: seconds)],
+      if (kIsWeb) {
+        return MaterialApp(
+          home: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 0,
+                bottom: const PreferredSize(
+                    preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
+                    child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Download')])),
+              ),
+              body: TabBarView(
+                children: [HomePage(seconds: seconds), const DownloadPage()],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      } else {
+        return MaterialApp(
+          home: DefaultTabController(
+            length: 1,
+            child: Scaffold(
+              appBar: AppBar(
+                toolbarHeight: 0,
+                bottom: const PreferredSize(
+                    preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
+                    child: TabBar(tabs: [Tab(text: 'Home')])),
+              ),
+              body: TabBarView(
+                children: [HomePage(seconds: seconds)],
+              ),
+            ),
+          ),
+        );
+      }
     } else {
       return const MaterialApp(
         home: Scaffold(

@@ -48,3 +48,6 @@ macos/*
 linux/*
 windows/flutter/*
 ios/*
+web/download/*
+
+.vscode/settings.json

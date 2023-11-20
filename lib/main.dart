@@ -70,59 +70,28 @@ class _MainAppState extends State<MainApp> {
         // --accent: #6d6a81;
         colorSchemeSeed: const Color.fromARGB(255, 0, 26, 255),
         fontFamily: 'Fira Code');
+
+    var pages = <String, Widget>{"Home": const HomePage()};
+    if (kIsWeb) {
+      pages["Download"] = const DownloadPage();
+    }
+
     if (isLoaded) {
-      if (kIsWeb) {
-        return MaterialApp(
-          theme: themeData,
-          home: Stack(
-            children: [
-              DefaultTabController(
-                length: 2,
-                child: Scaffold(
-                  appBar: AppBar(
-                    toolbarHeight: 0,
-                    bottom: const PreferredSize(
-                        preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
-                        child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Download')])),
-                  ),
-                  body: const TabBarView(
-                    children: [HomePage(), DownloadPage()],
-                  ),
-                ),
-              ),
-              const Positioned(
-                  bottom: 0,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text(
-                      version,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Fira Code',
-                        fontWeight: FontWeight.normal,
-                        fontSize: 10,
-                        decoration: TextDecoration.none,
-                      ),
-                    ),
-                  )),
-            ],
-          ),
-        );
-      } else {
-        return MaterialApp(
-          theme: themeData,
-          home: Stack(children: [
+      return MaterialApp(
+        theme: themeData,
+        home: Stack(
+          children: [
             DefaultTabController(
-              length: 1,
+              length: pages.length,
               child: Scaffold(
                 appBar: AppBar(
                   toolbarHeight: 0,
-                  bottom: const PreferredSize(
-                      preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
-                      child: TabBar(tabs: [Tab(text: 'Home')])),
+                  bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(kBottomNavigationBarHeight),
+                      child: TabBar(tabs: [for (var pageName in pages.keys) Tab(text: pageName)])),
                 ),
-                body: const TabBarView(
-                  children: [HomePage()],
+                body: TabBarView(
+                  children: [for (var page in pages.values) page],
                 ),
               ),
             ),
@@ -141,9 +110,9 @@ class _MainAppState extends State<MainApp> {
                     ),
                   ),
                 )),
-          ]),
-        );
-      }
+          ],
+        ),
+      );
     } else {
       return MaterialApp(
         theme: themeData,

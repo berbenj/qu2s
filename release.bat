@@ -3,50 +3,75 @@
 ::----------------::
 :: VERSION NUMBER ::
 ::----------------::
-@REM :: write out old version number
-@REM FOR /F %%i IN (version.txt) DO set old_version=%%i
-@REM echo [90mOld version is :: [0m%old_version%
-@REM :: get version number
-@REM echo [90mNew version number? (v{major}.{minor}.{patch}::{development})[0m
-@REM :: set version number
-@REM TYPE CON > version.txt
-@REM :: read new version number
-@REM FOR /F %%i IN (version.txt) DO set new_version=%%i
-@REM echo [90mNew version is :: [0m%new_version%
-@REM :: set dart file to proper version
-@REM echo const String version = '%new_version%'; > lib\version.dart
+:: write out old version number
+FOR /F %%i IN (version.txt) DO set old_version=%%i
+echo [90mOld version is :: [0m%old_version%
+:: get version number
+echo [90mNew version number? (v{major}.{minor}.{patch})[0m
+:: set version number
+:: todo: change version.txt to .version
+TYPE CON > version.txt
+:: read new version number
+FOR /F %%i IN (version.txt) DO set new_version=%%i
+echo [90mNew version is :: [0m%new_version%
+:: set dart file to proper version
+echo const String version = '%new_version%'; > lib\version.dart
+
+:: todo: merge into main, and add version tag
 
 ::-----------::
 :: APP BUILD ::
 ::-----------::
-@REM :: set to not web compile
-@REM copy .\lib\download_page_not_web.dart .\lib\download_page.dart > NUL 2> NUL
-@REM :: compile windows
-@REM call flutter build windows
-@REM :: compile android
-@REM call flutter build apk
+:: set to not web compile
+copy .\lib\download_page_not_web.dart .\lib\download_page.dart > NUL 2> NUL
+:: compile windows
+call flutter build windows
+:: compile android
+call flutter build apk
+echo [90m
 
-@REM :: zip exe and apk
-@REM tar -acf qu2s_win.zip -C .\build\windows\runner\Release\ *
-@REM tar -acf qu2s_android.zip -C .\build\app\outputs\flutter-apk\ app-release.apk
-@REM :: copy exe and apk
-@REM move .\qu2s_win.zip web\download\qu2s_win.zip
-@REM move .\qu2s_android.zip web\download\qu2s_android.zip
+:: zip exe and apk
+tar -acf qu2s_win.zip -C .\build\windows\runner\Release\ *
+tar -acf qu2s_android.zip -C .\build\app\outputs\flutter-apk\ app-release.apk
+:: copy exe and apk
+move .\qu2s_win.zip web\download\qu2s_win.zip
+move .\qu2s_android.zip web\download\qu2s_android.zip
 
 ::-----------::
 :: WEB BUILD ::
 ::-----------::
-@REM :: set to web compile
-@REM copy .\lib\download_page_web.dart .\lib\download_page.dart > NUL 2> NUL
-@REM :: compile web
-@REM flutter build web
+:: set to web compile
+copy .\lib\download_page_web.dart .\lib\download_page.dart > NUL 2> NUL
+:: compile web
+echo [0m
+call flutter build web
+echo [90m
 
 ::---------::
 :: PUBLISH ::
 ::---------::
-:: publish to webserver
-:: git ftp
+pushd .\build\web
+:: (re)set the ftp login details
+git config git-ftp.url "ftp://ftp.qu2s.com:21/"
+git config git-ftp.user "u577410265.hemlock7145"
+git config git-ftp.password "m78KWsa75agEvNTgzsDzyA2XevsG8JLxrA8g8F6T"
+:: commit here as new version
+git commit * -m "%new_version%"
+:: push to webserver
+git ftp push
 
-git config git-ftp.url "ftp://qu2s.com:21/public_html"
-git config git-ftp.user "hemlock7145"
-git config git-ftp.password "o^Rs%&cr6NQZC@L8mr&gjZ692"
+popd
+
+:: set to not web compile
+copy .\lib\download_page_not_web.dart .\lib\download_page.dart > NUL 2> NUL
+
+echo .
+echo [1m[42m PUBLISH COMPLETE [100m %new_version% [0m
+echo .
+
+:: fixme: add error handling
+:: echo [1m[4m[41m WINDOWS BUILD FAILED [0m
+
+:: todo: set version in pubspec.yaml
+:: todo: display version in app
+:: todo: show version in downloaded file e.g. qu2s_v0.1.1_windows.zip

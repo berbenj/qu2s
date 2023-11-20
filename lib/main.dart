@@ -9,6 +9,7 @@ import 'package:firedart/firedart.dart';
 
 import 'download_page.dart';
 import 'version.dart';
+import 'home.dart';
 
 void main() {
   runApp(const MainApp());
@@ -84,8 +85,8 @@ class _MainAppState extends State<MainApp> {
                         preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
                         child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Download')])),
                   ),
-                  body: TabBarView(
-                    children: [HomePage(seconds: seconds), const DownloadPage()],
+                  body: const TabBarView(
+                    children: [HomePage(), DownloadPage()],
                   ),
                 ),
               ),
@@ -120,8 +121,8 @@ class _MainAppState extends State<MainApp> {
                       preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
                       child: TabBar(tabs: [Tab(text: 'Home')])),
                 ),
-                body: TabBarView(
-                  children: [HomePage(seconds: seconds)],
+                body: const TabBarView(
+                  children: [HomePage()],
                 ),
               ),
             ),
@@ -155,23 +156,5 @@ class _MainAppState extends State<MainApp> {
         ),
       );
     }
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-    required this.seconds,
-  });
-
-  final String seconds;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text(seconds),
-      ),
-    );
   }
 }

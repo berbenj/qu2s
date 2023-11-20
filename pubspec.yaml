@@ -10,8 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   firedart: ^0.9.1+1
-  # firebase_core: ^2.10.0
-  # firebase_auth: ^4.4.2
+  dart_date: ^1.1.1
   flutter_spinkit: ^5.2.0
 
 dev_dependencies:
@@ -21,3 +20,17 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    - family: Fira code
+      fonts:
+        - asset: fonts/FiraCode-Light.ttf
+          weight: 300
+        - asset: fonts/FiraCode-Regular.ttf
+          weight: 400
+        - asset: fonts/FiraCode-Medium.ttf
+          weight: 500
+        - asset: fonts/FiraCode-SemiBold.ttf
+          weight: 600
+        - asset: fonts/FiraCode-Bold.ttf
+          weight: 700

@@ -17,12 +17,12 @@ class DownloadPage extends StatelessWidget {
           children: [
             OutlinedButton(
               child: const Text('Download for windows'),
-              onPressed: () => downloadFile('./download/qu2s.zip', 'qu2s'),
+              onPressed: () => downloadFile('./download/qu2s_win.zip', 'qu2s_windows'),
             ),
             const SizedBox(width: 20),
             OutlinedButton(
               child: const Text('Download for android'),
-              onPressed: () => downloadFile('', ''),
+              onPressed: () => downloadFile('./download/qu2s_android.zip', 'qu2s_android'),
             ),
           ],
         ),

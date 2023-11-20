@@ -59,48 +59,97 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = ThemeData(
+        brightness: Brightness.dark,
+        // primarySwatch: Colors.grey,
+        // --text: #ecede9;
+        // --background: #030302;
+        // --primary: #373541;
+        // --secondary: #10110e;
+        // --accent: #6d6a81;
+        colorSchemeSeed: const Color.fromARGB(255, 0, 26, 255),
+        fontFamily: 'Fira Code');
     if (isLoaded) {
       if (kIsWeb) {
         return MaterialApp(
-          home: DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                toolbarHeight: 0,
-                bottom: const PreferredSize(
-                    preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
-                    child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Download')])),
+          theme: themeData,
+          home: Stack(
+            children: [
+              DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                  appBar: AppBar(
+                    toolbarHeight: 0,
+                    bottom: const PreferredSize(
+                        preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
+                        child: TabBar(tabs: [Tab(text: 'Home'), Tab(text: 'Download')])),
+                  ),
+                  body: TabBarView(
+                    children: [HomePage(seconds: seconds), const DownloadPage()],
+                  ),
+                ),
               ),
-              body: TabBarView(
-                children: [HomePage(seconds: seconds), const DownloadPage()],
-              ),
-            ),
+              const Positioned(
+                  bottom: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Text(
+                      version,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Fira Code',
+                        fontWeight: FontWeight.normal,
+                        fontSize: 10,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  )),
+            ],
           ),
         );
       } else {
         return MaterialApp(
-          home: DefaultTabController(
-            length: 1,
-            child: Scaffold(
-              appBar: AppBar(
-                toolbarHeight: 0,
-                bottom: const PreferredSize(
-                    preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
-                    child: TabBar(tabs: [Tab(text: 'Home')])),
-              ),
-              body: TabBarView(
-                children: [HomePage(seconds: seconds)],
+          theme: themeData,
+          home: Stack(children: [
+            DefaultTabController(
+              length: 1,
+              child: Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: 0,
+                  bottom: const PreferredSize(
+                      preferredSize: Size.fromHeight(kBottomNavigationBarHeight),
+                      child: TabBar(tabs: [Tab(text: 'Home')])),
+                ),
+                body: TabBarView(
+                  children: [HomePage(seconds: seconds)],
+                ),
               ),
             ),
-          ),
+            const Positioned(
+                bottom: 0,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Text(
+                    version,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Fira Code',
+                      fontWeight: FontWeight.normal,
+                      fontSize: 10,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                )),
+          ]),
         );
       }
     } else {
-      return const MaterialApp(
-        home: Scaffold(
+      return MaterialApp(
+        theme: themeData,
+        home: const Scaffold(
           body: Center(
             child: SpinKitDancingSquare(
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ),

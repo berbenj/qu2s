@@ -1,4 +1,5 @@
 @echo off
+:: todo: rename this file to release.bat
 
 ::----------------::
 :: VERSION NUMBER ::
@@ -9,6 +10,7 @@ echo [90mOld version is :: [0m%old_version%
 :: get version number
 echo [90mNew version number? (v{major}.{minor}.{patch})[0m
 :: set version number
+:: todo: only ask weather the change is major/minor/patch and auto increment the version number
 :: todo: change version.txt to .version
 TYPE CON > version.txt
 :: read new version number
@@ -18,6 +20,7 @@ echo [90mNew version is :: [0m%new_version%
 echo const String version = '%new_version%'; > lib\version.dart
 
 :: todo: merge into main, and add version tag
+:: todo: instead of merge use pull requiest merge?
 
 ::-----------::
 :: APP BUILD ::

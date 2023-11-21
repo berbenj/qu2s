@@ -9,6 +9,8 @@ echo [90mOld version is :: [0m%old_version%
 :: get version number
 echo [90mNew version number? (v{major}.{minor}.{patch}::{development})[0m
 :: set version number
+:: todo: dont ask new version number, only automatically increment it 
+:: todo: change version.txt to .version
 TYPE CON > version.txt
 :: read new version number
 FOR /F %%i IN (version.txt) DO set new_version=%%i

@@ -71,9 +71,9 @@ class _MainAppState extends State<MainApp> {
         colorSchemeSeed: const Color.fromARGB(255, 0, 26, 255),
         fontFamily: 'Fira Code');
 
-    var pages = <String, Widget>{"Home": const HomePage()};
+    var pages = <String, Widget>{"Home": const HomeTab()};
     if (kIsWeb) {
-      pages["Download"] = const DownloadPage();
+      pages["Download"] = const DownloadTab();
     }
 
     if (isLoaded) {

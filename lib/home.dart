@@ -12,14 +12,14 @@ import 'q2_platform.dart';
 
 Q2Platform q2Platform = Q2Platform();
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeTab extends StatefulWidget {
+  const HomeTab({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeTabState extends State<HomeTab> {
   final auth = fd.FirebaseAuth.instance;
   String _b36Date = '';
   String _qdArton = '';
@@ -54,44 +54,8 @@ class _HomePageState extends State<HomePage> {
 
       _gregorianYear = qdt.grYear;
       _gregorianMonth = qdt.grMonth;
-      switch (int.parse(qdt.grMonth)) {
-        case 1:
-          _gregorianMonthName = 'jan';
-          break;
-        case 2:
-          _gregorianMonthName = 'feb';
-          break;
-        case 3:
-          _gregorianMonthName = 'mar';
-          break;
-        case 4:
-          _gregorianMonthName = 'apr';
-          break;
-        case 5:
-          _gregorianMonthName = 'may';
-          break;
-        case 6:
-          _gregorianMonthName = 'jun';
-          break;
-        case 7:
-          _gregorianMonthName = 'jul';
-          break;
-        case 8:
-          _gregorianMonthName = 'aug';
-          break;
-        case 9:
-          _gregorianMonthName = 'sep';
-          break;
-        case 10:
-          _gregorianMonthName = 'oct';
-          break;
-        case 11:
-          _gregorianMonthName = 'nov';
-          break;
-        case 12:
-          _gregorianMonthName = 'dec';
-          break;
-      }
+      const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+      _gregorianMonthName = monthNames[int.parse(qdt.grMonth) - 1];
 
       _gregorianDay = qdt.grDay;
       _gregorianHour = qdt.sdHour;
@@ -99,32 +63,8 @@ class _HomePageState extends State<HomePage> {
       _gregorianSecond = ':${qdt.sdSecond}';
       _amp = (int.parse(qdt.sdHour) < 12) ? 'AM' : 'PM';
       _12h = (((int.parse(qdt.sdHour) + 11) % 12) + 1).toString().padLeft(2, '0');
-      var wd = date.weekday;
-      switch (wd) {
-        case DateTime.monday:
-          _weekday = 'mon';
-          break;
-        case DateTime.tuesday:
-          _weekday = 'tue';
-          break;
-        case DateTime.wednesday:
-          _weekday = 'wed';
-          break;
-        case DateTime.thursday:
-          _weekday = 'thu';
-          break;
-        case DateTime.friday:
-          _weekday = 'fri';
-          break;
-        case DateTime.saturday:
-          _weekday = 'sat';
-          break;
-        case DateTime.sunday:
-          _weekday = 'sun';
-          break;
-        default:
-          _weekday = '';
-      }
+      const weekDayNames = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+      _weekday = weekDayNames[date.weekday - 1];
       _weeknum = date.getWeek.toString().padLeft(2, '0');
     });
   }
@@ -161,6 +101,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _setCurrentDate();
 
+    // todo: if height ; width
     if (!kIsWeb && Platform.isAndroid) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -241,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       _gregorianMonth,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300),
                     ),
                     Text(
                       _gregorianMonthName,

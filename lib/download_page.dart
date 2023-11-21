@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DownloadPage extends StatelessWidget {
-  const DownloadPage({
+class DownloadTab extends StatelessWidget {
+  const DownloadTab({
     super.key,
   });
 

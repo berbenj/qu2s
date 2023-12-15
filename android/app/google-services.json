@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "420780234622",
+    "project_id": "qu2s-596fc",
+    "storage_bucket": "qu2s-596fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420780234622:android:f223cfc2379c3df7d1452f",
+        "android_client_info": {
+          "package_name": "com.example.qu2s"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTcCzF-zzwRfg5h9pOQh1vxXXwYg3_vnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

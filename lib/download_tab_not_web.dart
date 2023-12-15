@@ -7,6 +7,7 @@ class DownloadTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // important: this should never be called
     return const Scaffold(
       body: Center(child: Text("Downloading other versions on this platform is not supported!")),
     );

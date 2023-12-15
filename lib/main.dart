@@ -7,9 +7,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 // Firebase
 import 'package:firedart/firedart.dart';
 
-import 'download_page.dart';
+import 'download_tab.dart';
+import 'user_tab.dart';
 import 'version.dart';
-import 'home.dart';
+import 'home_tab.dart';
+
+const apiKey = 'AIzaSyBkO05UO2PHQvgfAnobGZjmhpa6-yrtm-I';
+const projectId = 'qu2s-596fc';
 
 void main() {
   runApp(const MainApp());
@@ -35,9 +39,8 @@ class _MainAppState extends State<MainApp> {
   }
 
   void connectToDatabase() async {
-    Firestore.initialize('qu2s-596fc');
-    FirebaseAuth.initialize('AIzaSyCFfMcpev4TWt3yst8pNID9Qicu6vX8Q9E', VolatileStore());
-    debugPrint('Connected to Firebase Database and Authentication');
+    Firestore.initialize(projectId);
+    FirebaseAuth.initialize(apiKey, VolatileStore());
     setState(() {
       isLoaded = true;
     });
@@ -61,17 +64,9 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     var themeData = ThemeData(
-        brightness: Brightness.dark,
-        // primarySwatch: Colors.grey,
-        // --text: #ecede9;
-        // --background: #030302;
-        // --primary: #373541;
-        // --secondary: #10110e;
-        // --accent: #6d6a81;
-        colorSchemeSeed: const Color.fromARGB(255, 0, 26, 255),
-        fontFamily: 'Fira Code');
+        brightness: Brightness.dark, colorSchemeSeed: const Color.fromARGB(255, 0, 0, 255), fontFamily: 'Fira Code');
 
-    var pages = <String, Widget>{"Home": const HomeTab()};
+    var pages = <String, Widget>{"Home": const HomeTab(), "User": const UserTab()};
     if (kIsWeb) {
       pages["Download"] = const DownloadTab();
     }
@@ -98,7 +93,7 @@ class _MainAppState extends State<MainApp> {
             const Positioned(
                 bottom: 0,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 5),
+                  padding: EdgeInsets.only(left: 25),
                   child: Text(
                     version,
                     style: TextStyle(

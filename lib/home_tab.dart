@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 // import 'package:ntp/ntp.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:dart_date/dart_date.dart';
@@ -31,8 +29,8 @@ class _HomeTabState extends State<HomeTab> {
   String _gregorianHour = '';
   String _gregorianMinute = '';
   String _gregorianSecond = '';
-  String _amp = '';
-  String _12h = '';
+  String _ampm = '';
+  String _twelveHours = '';
   String _weekday = '';
   String _weeknum = '';
   Timer? _clockTimer;
@@ -61,8 +59,8 @@ class _HomeTabState extends State<HomeTab> {
       _gregorianHour = qdt.sdHour;
       _gregorianMinute = ':${qdt.sdMinute}';
       _gregorianSecond = ':${qdt.sdSecond}';
-      _amp = (int.parse(qdt.sdHour) < 12) ? 'AM' : 'PM';
-      _12h = (((int.parse(qdt.sdHour) + 11) % 12) + 1).toString().padLeft(2, '0');
+      _ampm = (int.parse(qdt.sdHour) < 12) ? 'AM' : 'PM';
+      _twelveHours = (((int.parse(qdt.sdHour) + 11) % 12) + 1).toString().padLeft(2, '0');
       const weekDayNames = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
       _weekday = weekDayNames[date.weekday - 1];
       _weeknum = date.getWeek.toString().padLeft(2, '0');
@@ -101,8 +99,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     _setCurrentDate();
 
-    // todo: if height ; width
-    if (!kIsWeb && Platform.isAndroid) {
+    if (MediaQuery.of(context).size.height > MediaQuery.of(context).size.width) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -219,11 +216,11 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 const SizedBox(height: 5),
                 Text(
-                  _amp,
+                  _ampm,
                   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300),
                 ),
                 Text(
-                  _12h,
+                  _twelveHours,
                   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300),
                 ),
               ],

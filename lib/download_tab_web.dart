@@ -2,9 +2,10 @@
 import 'dart:html' as html;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:qu2s/version.dart';
 
-class DownloadPage extends StatelessWidget {
-  const DownloadPage({
+class DownloadTab extends StatelessWidget {
+  const DownloadTab({
     super.key,
   });
 
@@ -17,12 +18,12 @@ class DownloadPage extends StatelessWidget {
           children: [
             OutlinedButton(
               child: const Text('Download for windows'),
-              onPressed: () => downloadFile('./download/qu2s_win.zip', 'qu2s_windows'),
+              onPressed: () => downloadFile('./download/qu2s_${version}_win.zip', 'qu2s_${version}_windows'),
             ),
             const SizedBox(width: 20),
             OutlinedButton(
               child: const Text('Download for android'),
-              onPressed: () => downloadFile('./download/qu2s_android.zip', 'qu2s_android'),
+              onPressed: () => downloadFile('./download/qu2s_${version}_android.apk', 'qu2s_${version}_android'),
             ),
           ],
         ),

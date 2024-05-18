@@ -1,124 +1,80 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'core/display.dart';
+import 'config/theme_config.dart';
+import 'core/ioc.dart';
+import 'services/database_service.dart';
+import 'services/page_service.dart';
+import 'services/user_service.dart';
+import 'pages/events/events_screen.dart';
+import 'pages/tasks/task_screen.dart';
+import 'pages/user/user_screen.dart';
 
-// Firebase
-import 'package:firedart/firedart.dart';
-
-import 'download_tab.dart';
-import 'user_tab.dart';
-import 'version.dart';
-import 'home_tab.dart';
-
-const apiKey = 'AIzaSyBkO05UO2PHQvgfAnobGZjmhpa6-yrtm-I';
-const projectId = 'qu2s-596fc';
-
-void main() {
-  runApp(const MainApp());
+void main() async {
+  await DatabaseService.init();
+  IoC.init();
+  runApp(MainApp());
 }
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class MainApp extends StatelessWidget {
+  MainApp({super.key});
 
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
-  bool isLoaded = false;
-  String seconds = '';
-
-  Timer? _clockTimer;
-
-  void _setSecond() {
-    setState(() {
-      seconds = DateTime.now().second.toString();
-    });
-  }
-
-  void connectToDatabase() async {
-    Firestore.initialize(projectId);
-    FirebaseAuth.initialize(apiKey, VolatileStore());
-    setState(() {
-      isLoaded = true;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    connectToDatabase();
-
-    _clockTimer = Timer.periodic(const Duration(milliseconds: 10), (timer) => _setSecond());
-  }
-
-  @override
-  void dispose() {
-    _clockTimer?.cancel();
-    super.dispose();
-  }
+  final userService = IoC.get<UserService>();
+  final pageService = IoC.get<PageService>();
 
   @override
   Widget build(BuildContext context) {
-    var themeData = ThemeData(
-        brightness: Brightness.dark, colorSchemeSeed: const Color.fromARGB(255, 0, 0, 255), fontFamily: 'Fira Code');
-
-    var pages = <String, Widget>{"Home": const HomeTab(), "User": const UserTab()};
-    if (kIsWeb) {
-      pages["Download"] = const DownloadTab();
-    }
-
-    if (isLoaded) {
-      return MaterialApp(
-        theme: themeData,
-        home: Stack(
-          children: [
-            DefaultTabController(
-              length: pages.length,
-              child: Scaffold(
-                appBar: AppBar(
-                  toolbarHeight: 0,
-                  bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(kBottomNavigationBarHeight),
-                      child: TabBar(tabs: [for (var pageName in pages.keys) Tab(text: pageName)])),
-                ),
-                body: TabBarView(
-                  children: [for (var page in pages.values) page],
-                ),
-              ),
-            ),
-            const Positioned(
-                bottom: 0,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 25),
-                  child: Text(
-                    version,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Fira Code',
-                      fontWeight: FontWeight.normal,
-                      fontSize: 10,
-                      decoration: TextDecoration.none,
+    return MaterialApp(
+      title: 'qu2s',
+      theme: ThemeData.dark(),
+      home: Display(
+        contents: [pageService.mainScreenIndex, userService.isLoggedIn],
+        builder: (_, __) {
+          if (userService.isLoggedIn.value) {
+            return Scaffold(
+              bottomNavigationBar: NavigationBar(
+                indicatorColor: ThemeConfig.color.accent,
+                selectedIndex: pageService.mainScreenIndex.value,
+                onDestinationSelected: (value) {
+                  pageService.mainScreenIndex.value = value;
+                },
+                destinations: [
+                  if (userService.isLoggedIn.value) ...[
+                    NavigationDestination(
+                      icon: const Icon(Icons.task_alt),
+                      selectedIcon: Icon(Icons.task_alt, color: ThemeConfig.color.onAccent),
+                      label: 'Tasks',
                     ),
+                    NavigationDestination(
+                      icon: const Icon(Icons.calendar_month),
+                      selectedIcon: Icon(Icons.calendar_month, color: ThemeConfig.color.onAccent),
+                      label: 'Events',
+                    ),
+                  ],
+                  NavigationDestination(
+                    icon: const Icon(Icons.settings),
+                    selectedIcon: Icon(Icons.settings, color: ThemeConfig.color.onAccent),
+                    label: 'Options',
                   ),
-                )),
-          ],
-        ),
-      );
-    } else {
-      return MaterialApp(
-        theme: themeData,
-        home: const Scaffold(
-          body: Center(
-            child: SpinKitDancingSquare(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-    }
+                ],
+              ),
+              body: Padding(
+                padding: MediaQuery.viewPaddingOf(context),
+                child: [
+                  // todo: dont rebuild pages on page change, use the same one every time, so that in progress stuff stays
+                  TaskScreen(),
+                  EventsScreen(),
+                  UserScreen(),
+                  // todo: add download page on web
+                ][pageService.mainScreenIndex.value],
+              ),
+            );
+          } else {
+            return Scaffold(
+              body: UserScreen(),
+            );
+          }
+        },
+      ),
+    );
   }
 }

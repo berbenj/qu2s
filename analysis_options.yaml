@@ -1,1 +1,16 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # [Style rules]
+    - annotate_overrides
+    - avoid_void_async
+    - await_only_futures
+    - camel_case_extensions
+    - empty_catches
+    - avoid_print
+    - hash_and_equals
+    - require_trailing_commas
+    - prefer_single_quotes
+    - prefer_asserts_with_message
+    - prefer_relative_imports

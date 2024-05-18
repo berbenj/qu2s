@@ -1,0 +1,43 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  // https://dartcode.org/docs/launch-configuration/
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "windows",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "windows",
+      "flutterMode": "debug",
+    },
+    {
+      "name": "web",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "flutterMode": "debug",
+    },
+    {
+      "name": "android (emulator)",
+      "request": "launch",
+      "args": ["--multidex"],
+      "type": "dart",
+      "deviceId": "sm s908e",
+      "flutterMode": "debug",
+    },
+    // {
+    //   "name": "qu2s_v5 (profile mode)",
+    //   "request": "launch",
+    //   "type": "dart",
+    //   "flutterMode": "profile"
+    // },
+    // {
+    //   "name": "qu2s_v5 (release mode)",
+    //   "request": "launch",
+    //   "type": "dart",
+    //   "flutterMode": "release"
+    // }
+  ]
+}
